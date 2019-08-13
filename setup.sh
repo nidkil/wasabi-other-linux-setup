@@ -1,14 +1,20 @@
 #!/bin/bash
 
+cleanup() {
+  rm PGP.txt Wasabi* debug.log
+}
+
 VERSION=$(curl -s https://api.github.com/repos/zkSNACKs/WalletWasabi/releases/latest | grep tag_name | cut -d ':' -f 2 | cut -d '"' -f 2 | cut -d 'v' -f 2)
 NAME=WasabiLinux-${VERSION}
 ICON=WasabiLogo48.png
+
+cleanup
 
 echo "Installing Wasabi Wallet: VERSION=${VERSION}, NAME=${NAME}"
 
 cd ~/Downloads
 
-echo -e "\nDownloading files"
+echo -e "\nDownloading files (please be patient, this might take a while depending on your network speed)"
 wget -q -o debug.log https://raw.githubusercontent.com/zkSNACKs/WalletWasabi/master/PGP.txt
 wget -q -o debug.log https://github.com/zkSNACKs/WalletWasabi/releases/download/v${VERSION}/${NAME}.tar.gz
 wget -q -o debug.log https://github.com/zkSNACKs/WalletWasabi/releases/download/v${VERSION}/${NAME}.tar.gz.asc
@@ -53,7 +59,7 @@ Comment[en_US]=Wasabi Wallet - Desktop
 chmod ugo+x ~/.local/share/applications/wasabi-wallet.desktop
 
 echo "Cleaning up"
-rm PGP.txt Wasabi*
+cleanup
 
 echo -e "\nYou can now run Wasabi Wallet from the Application menu or"
 echo "execute it from the command-line '~/WasabiLinux-${VERSION}/wassabee'"
