@@ -13,7 +13,7 @@ It does the following:
 ## Usage
 
 ```
-bash <(curl https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh)
+bash <(curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh)
 ```
 
 ## Run Wasabi Wallet
