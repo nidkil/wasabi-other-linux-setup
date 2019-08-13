@@ -4,21 +4,17 @@
 
 It does the following:
 - Downloads the latest version of the Other Linux version
-- It displays the PGP verification signature of the downloaded archive
-- It ask you to verify the PGP verification signature and confirm it can continue 
+- Displays the PGP verification signature of the downloaded archive
+- Asks you to verify the PGP verification signature and confirm it can continue
 - Unpacks the archive and installs it in the current users home directory
-- Creates a desktop shortcut
+- Creates a desktop shortcut including icon :-)
 - Cleans up
 
 ## Usage
 
 ```
-cd ~/Downloads
-wget https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh
-chmod u+x setup.sh
-./setup.sh
-rm setup.sh
-``` 
+bash <(curl https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh)
+```
 
 ## Run Wasabi Wallet
 
