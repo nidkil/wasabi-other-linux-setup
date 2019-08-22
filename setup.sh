@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cleanup() {
-  rm PGP.* Wasabi* debug.log 2> /dev/null
+  rm -rf "${TEMP_DIR}"
 }
 
 continue() {
@@ -16,14 +16,13 @@ continue() {
   done
 }
 
+TEMP_DIR="`mktemp -d`"
 VERSION=$(curl -s https://api.github.com/repos/zkSNACKs/WalletWasabi/releases/latest | grep tag_name | cut -d ':' -f 2 | cut -d '"' -f 2 | cut -d 'v' -f 2)
 NAME=WasabiLinux-${VERSION}
 DEST_DIR=${HOME}/${NAME}
 ICON=WasabiLogo48.png
 
 echo "Installing Wasabi Wallet: VERSION=${VERSION}, NAME=${NAME}"
-
-cleanup
 
 if [ -d ${DEST_DIR} ]; then
   echo -e "\nThe latest version is already installed. If you continue it will be re-installed.\n"
@@ -32,7 +31,7 @@ if [ -d ${DEST_DIR} ]; then
 
   rm -rf ${DEST_DIR}
 fi
-cd ~/Downloads
+cd "${TEMP_DIR}"
 
 echo -e "\nDownloading files (please be patient, this might take a while depending on your network speed)"
 wget -q --show-progress -o debug.log https://raw.githubusercontent.com/zkSNACKs/WalletWasabi/master/PGP.txt
@@ -71,6 +70,7 @@ Comment[en_US]=Wasabi Wallet - Desktop
 chmod ugo+x ~/.local/share/applications/wasabi-wallet.desktop
 
 echo "Cleaning up"
+cd -
 cleanup
 
 echo -e "\nYou can now run Wasabi Wallet from the Application menu or execute it"
