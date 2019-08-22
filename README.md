@@ -47,7 +47,7 @@ rm wasabi-setup.sh
 
 ## Run Wasabi Wallet
 
-You can now run Wasabi Wallet from the Application menu or execute it from the command-line:
+You can now run Wasabi Wallet from the Application menu (Other > Wasabi Wallet) or execute it from the command-line:
 
 ```
 ~/.local/bin/WasabiLinux-*/wassabee
