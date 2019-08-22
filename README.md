@@ -39,7 +39,7 @@ Execute the script:
 ./wasabi-setup.sh
 ```
 
-You can remove the script after installation has completed:
+You can remove the script after the installation has completed:
 
 ```
 rm wasabi-setup.sh
@@ -47,7 +47,11 @@ rm wasabi-setup.sh
 
 ## Run Wasabi Wallet
 
-You can now run Wasabi Wallet from the Application menu or execute it from the command-line.
+You can now run Wasabi Wallet from the Application menu or execute it from the command-line:
+
+```
+~/.local/bin/WasabiLinux-*/wassabee
+```
 
 ## Useful links
 
