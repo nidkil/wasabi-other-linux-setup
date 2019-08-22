@@ -30,7 +30,7 @@ Run this script at your own risk. Don't trust, but verify!
 Download the script and inspect it to verify it does what it claims to do before executing it:
 
 ```
-curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh > wasabi-setup.sh
+curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/wasabi-setup.sh > wasabi-setup.sh
 ```
 
 Execute the script:
