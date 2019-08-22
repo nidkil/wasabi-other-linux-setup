@@ -10,26 +10,39 @@ It does the following:
 - Creates a desktop shortcut including icon :-)
 - Cleans up
 
+## Security warning
+
+> Only run scripts that you trust. While scripts from the Internet can be useful, these scripts can potentially harm your computer. Never run them as is, but verify that they do what they claim to do.
+
+Some general security and safety tips in regard to scripts and downloads:
+
+- Never execute scripts from others as is.
+- Always check what they do and ensure they do what's advertised.
+- Be VERY careful executing scripts as root, as this gives scripts unrestricted access to your system!
+- Always verify the checksum and/or PGP information of downloaded files, to ensure they have not been modified.
+
+## Disclaimer
+
+Run this script at your own risk. Don't trust, but verify!
+
 ## Usage
 
-Download this script
+Download the script and inspect it to verify it does what it claims to do before executing it:
 
 ```
-curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh > wasabi_setup.sh
+curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh > wasabi-setup.sh
 ```
 
-Inspect the script to verify it isn't malicious.
-
-Run the script:
+Execute the script:
 
 ```
-bash wasabi_setup.sh
+./wasabi-setup.sh
 ```
 
-You can remove the script after installation.
+You can remove the script after installation has completed:
 
 ```
-rm wasabi_setup.sh
+rm wasabi-setup.sh
 ```
 
 ## Run Wasabi Wallet
@@ -40,6 +53,7 @@ You can now run Wasabi Wallet from the Application menu or execute it from the c
 
 - [Wasabi Wallet](https://www.wasabiwallet.io/)
 - [Wasabi Wallet Github](https://github.com/zkSNACKs/WalletWasabi/)
+- [Wasabi PGP information](https://docs.wasabiwallet.io/using-wasabi/InstallPackage.html#other-linux) - see step 3
 
 ## Support & brag about us
 
