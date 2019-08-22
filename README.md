@@ -12,8 +12,24 @@ It does the following:
 
 ## Usage
 
+Download this script
+
 ```
-bash <(curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh)
+curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/master/setup.sh > wasabi_setup.sh
+```
+
+Inspect the script to verify it isn't malicious.
+
+Run the script:
+
+```
+bash wasabi_setup.sh
+```
+
+You can remove the script after installation.
+
+```
+rm wasabi_setup.sh
 ```
 
 ## Run Wasabi Wallet
