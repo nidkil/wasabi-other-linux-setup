@@ -1,7 +1,8 @@
 #!/bin/bash
 
 cleanup() {
-  rm -rf "${TEMP_DIR}"
+  rm -rf ${TEMP_DIR}
+  cd ${CUR_DIR}
 }
 
 continue() {
@@ -16,13 +17,23 @@ continue() {
   done
 }
 
-TEMP_DIR="`mktemp -d`"
 VERSION=$(curl -s https://api.github.com/repos/zkSNACKs/WalletWasabi/releases/latest | grep tag_name | cut -d ':' -f 2 | cut -d '"' -f 2 | cut -d 'v' -f 2)
 NAME=WasabiLinux-${VERSION}
-DEST_DIR=${HOME}/${NAME}
+CUR_DIR=${pwd}
+DEST_DIR=${HOME}/.local/bin/${NAME}
+TEMP_DIR=$(mktemp -d)
 ICON=WasabiLogo48.png
 
-echo "Installing Wasabi Wallet: VERSION=${VERSION}, NAME=${NAME}"
+if [[ ! ${TEMP_DIR} || ! -d ${TEMP_DIR} ]]; then
+  echo "ERROR: Could not create temporary directory: ${TEMP_DIR}"
+  exit 1
+fi
+
+# Register the cleanup function to be called on the EXIT signal to ensure cleanup always happens
+# to avoid orphaned directories and files
+trap cleanup EXIT
+
+echo "Installing Wasabi Wallet: VERSION=${VERSION}, NAME=${NAME}, TEMP_DIR=${TEMP_DIR}"
 
 if [ -d ${DEST_DIR} ]; then
   echo -e "\nThe latest version is already installed. If you continue it will be re-installed.\n"
@@ -31,7 +42,8 @@ if [ -d ${DEST_DIR} ]; then
 
   rm -rf ${DEST_DIR}
 fi
-cd "${TEMP_DIR}"
+
+cd ${TEMP_DIR}
 
 echo -e "\nDownloading files (please be patient, this might take a while depending on your network speed)"
 wget -q --show-progress -o debug.log https://raw.githubusercontent.com/zkSNACKs/WalletWasabi/master/PGP.txt
@@ -51,7 +63,8 @@ echo -e "then the software has not been tampered with and you can continue.\n"
 continue
 
 echo -e "\nUnpacking archive and moving it to: ${DEST_DIR}"
-tar -pxzf ${NAME}.tar.gz -C ${HOME}
+mkdir -p ${DEST_DIR}
+tar -pxzf ${NAME}.tar.gz -C ${DEST_DIR} --strip-components 1
 mv ${ICON} ${DEST_DIR}/.
 
 echo "Creating desktop shortcut"
@@ -60,9 +73,9 @@ Encoding=UTF-8
 Version=${VERSION}
 Name[en_US]=Wasabi Wallet
 GenericName=Wasabi Wallet - Desktop
-Exec=${HOME}/WasabiLinux-${VERSION}/wassabee
+Exec=${DEST_DIR}/wassabee
 Terminal=false
-Icon[en_US]=${HOME}/WasabiLinux-${VERSION}/${ICON}
+Icon[en_US]=${DEST_DIR}/${ICON}
 Type=Application
 Categories=Application;Finance;Crypto;Wallet;
 Comment[en_US]=Wasabi Wallet - Desktop
@@ -70,7 +83,6 @@ Comment[en_US]=Wasabi Wallet - Desktop
 chmod ugo+x ~/.local/share/applications/wasabi-wallet.desktop
 
 echo "Cleaning up"
-cd -
 cleanup
 
 echo -e "\nYou can now run Wasabi Wallet from the Application menu or execute it"
