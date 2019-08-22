@@ -2,4 +2,4 @@
 
 These people have contributed towards this projet:
 
-- Be the first!
+- [Martin Habovštiak](https://github.com/Kixunil)
