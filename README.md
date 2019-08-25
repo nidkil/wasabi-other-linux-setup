@@ -5,7 +5,7 @@
 It does the following:
 - Downloads the latest version of the Other Linux version
 - Displays the PGP verification signature of the downloaded archive
-- Asks you to verify the PGP verification signature and confirm it can continue
+- Verifies the PGP verification signature: if invalid it exits, otherwise it asks if it may continue
 - Unpacks the archive and installs it in `/.local/bin` under the current users home directory
 - Creates a desktop shortcut including icon :-)
 - Cleans up
