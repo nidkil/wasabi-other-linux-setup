@@ -4,6 +4,19 @@ NC='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 
+VERSION=$(curl -s https://api.github.com/repos/zkSNACKs/WalletWasabi/releases/latest | grep tag_name | cut -d ':' -f 2 | cut -d '"' -f 2 | cut -d 'v' -f 2)
+NAME=WasabiLinux-${VERSION}
+CUR_DIR=${pwd}
+DEST_DIR=${HOME}/.local/bin/${NAME}
+TEMP_DIR=$(mktemp -d)
+ICON=WasabiLogo48.png
+
+PGP_GOOD_SIG="Good signature"
+PGP_SIGNED_BY="Ficsór Ádám"
+PGP_FINGERPRINT="21D7CA45565DBCCEBE45115DB4B72266C47E075E"
+# Split string into slices of 4 digits and strip leading and trailing spaces
+PGP_FINGERPRINT_FORMATTED=$(echo -e $(echo ${PGP_FINGERPRINT} | awk '{gsub(/.{4}/,"& ")}1'))
+
 cleanup() {
   rm -rf ${TEMP_DIR}
   cd ${CUR_DIR}
@@ -32,19 +45,6 @@ has_string() {
     PGP_VALIDATION_FAILED=true
   fi
 }
-
-VERSION=$(curl -s https://api.github.com/repos/zkSNACKs/WalletWasabi/releases/latest | grep tag_name | cut -d ':' -f 2 | cut -d '"' -f 2 | cut -d 'v' -f 2)
-NAME=WasabiLinux-${VERSION}
-CUR_DIR=${pwd}
-DEST_DIR=${HOME}/.local/bin/${NAME}
-TEMP_DIR=$(mktemp -d)
-ICON=WasabiLogo48.png
-
-PGP_GOOD_SIG="Good signature"
-PGP_SIGNED_BY="Ficsór Ádám"
-PGP_FINGERPRINT="21D7CA45565DBCCEBE45115DB4B72266C47E075E"
-# Split string into slices of 4 digits and strip leading and trailing spaces
-PGP_FINGERPRINT_FORMATTED=$(echo -e $(echo ${PGP_FINGERPRINT} | awk '{gsub(/.{4}/,"& ")}1'))
 
 # Register the cleanup function to be called on the EXIT signal to ensure cleanup always happens
 # to avoid orphaned directories and files
