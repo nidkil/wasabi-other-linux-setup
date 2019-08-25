@@ -1,5 +1,9 @@
 #!/bin/bash
 
+NC='\033[0m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+
 cleanup() {
   rm -rf ${TEMP_DIR}
   cd ${CUR_DIR}
@@ -17,6 +21,18 @@ continue() {
   done
 }
 
+has_string() {
+  STR=$1
+  FIND=$2
+  MSG=$3
+  if [[ "${STR}" == *"${FIND}"* ]]; then
+    echo -e "${MSG}: ${GREEN}PASS${NC}"
+  else
+    echo -e "${MSG}: ${RED}FAIL${NC}"
+    PGP_VALIDATION_FAILED=true
+  fi
+}
+
 VERSION=$(curl -s https://api.github.com/repos/zkSNACKs/WalletWasabi/releases/latest | grep tag_name | cut -d ':' -f 2 | cut -d '"' -f 2 | cut -d 'v' -f 2)
 NAME=WasabiLinux-${VERSION}
 CUR_DIR=${pwd}
@@ -24,10 +40,11 @@ DEST_DIR=${HOME}/.local/bin/${NAME}
 TEMP_DIR=$(mktemp -d)
 ICON=WasabiLogo48.png
 
-if [[ ! ${TEMP_DIR} || ! -d ${TEMP_DIR} ]]; then
-  echo "ERROR: Could not create temporary directory: ${TEMP_DIR}"
-  exit 1
-fi
+PGP_GOOD_SIG="Good signature"
+PGP_SIGNED_BY="Ficsór Ádám"
+PGP_FINGERPRINT="21D7CA45565DBCCEBE45115DB4B72266C47E075E"
+# Split string into slices of 4 digits and strip leading and trailing spaces
+PGP_FINGERPRINT_FORMATTED=$(echo -e $(echo ${PGP_FINGERPRINT} | awk '{gsub(/.{4}/,"& ")}1'))
 
 # Register the cleanup function to be called on the EXIT signal to ensure cleanup always happens
 # to avoid orphaned directories and files
@@ -52,14 +69,24 @@ wget -q --show-progress -o debug.log https://github.com/zkSNACKs/WalletWasabi/re
 wget -q --show-progress -o debug.log https://raw.githubusercontent.com/zkSNACKs/WalletWasabi/master/WalletWasabi.Gui/Assets/${ICON}
 
 echo -e "\nVerifying PGP signature of file: ${NAME}.tar.gz\n"
-gpg --verify ${NAME}.tar.gz.asc ${NAME}.tar.gz
+# HACK: output of gpg will not capture with $(gpg .. ..), why?
+gpg --verify ${NAME}.tar.gz.asc ${NAME}.tar.gz > ${TEMP_DIR}/pgp.validation 2>&1
+PGP_INFO=$(cat ${TEMP_DIR}/pgp.validation)
 
-echo -e "\nIf the PGP verification message says:"
-echo "1) Good signature, and"
-echo "2) It was signed by: Ficsór Ádám, and"
-echo "3) Primary key fingerprint is: 21D7 CA45 565D BCCE BE45 115D B4B7 2266 C47E 075E"
-echo -e "then the software has not been tampered with and you can continue.\n"
+echo -e "${PGP_INFO}\n"
 
+PGP_VALIDATION_FAILED=false
+
+has_string "${PGP_INFO}" "${PGP_GOOD_SIG}" "1) ${PGP_GOOD_SIG}"
+has_string "${PGP_INFO}" "${PGP_SIGNED_BY}" "2) It was signed by ${PGP_SIGNED_BY}"
+has_string "${PGP_INFO}" "${PGP_FINGERPRINT}" "3) Primary key fingerprint is ${PGP_FINGERPRINT_FORMATTED}"
+
+if [[ "${PGP_VALIDATION_FAILED}" == "true" ]]; then
+  echo -e "\n${RED}PGP sginature validation failed${NC}"
+  exit
+fi
+
+echo ""
 continue
 
 echo -e "\nUnpacking archive and moving it to: ${DEST_DIR}"
