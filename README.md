@@ -35,7 +35,8 @@ curl -sS https://raw.githubusercontent.com/nidkil/wasabi-other-linux-setup/maste
 
 Execute the script:
 
-```
+``
+chmod u+x wasabi-setup.sh`
 ./wasabi-setup.sh
 ```
 
